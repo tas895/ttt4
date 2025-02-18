@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- https://tas895.github.io/ttt4/ttt4 -->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Tic Tac Toe: Part 4</title>
+<style type="text/css">
+    div.square {
+        width: 100px;
+        height: 100px;
+        border: solid #201A23 5px;
+        margin: 5px;
+        padding: 15px;
+        font-size: 80px;
+        color: #9E4770;
+        text-align: center;
+        background-color: #FBFBFB;
+    }
+    div.square:hover, div.square:hover .X, div.square:hover .O {color: #FBFBFB; background-color: #631D76}
+    div.board {
+        cursor: pointer;
+        width: 450px;
+        border: solid #9E4770, 5px;
+        margin-left: 50px;
+        display: grid;
+        grid-template-columns: 150px 150px 150px;
+        background-color: #2E2532;
+    }
+    h1 {
+        margin-left: 150px;
+        text-align: left;
+        color: #201A23;
+        font-size: 48px;
+    }
+    div.turn, div.win {
+        padding-top: 10px;
+        margin-left: 200px;
+        margin-top: 30px;
+        grid-template-rows: 150px 150px;
+        width: 150px;
+        height: 50px;
+        background-color: #9E4770;
+        color: #FBFBFB;
+        font: 48px;
+        font-weight: bold;
+        border: solid #2E2532 5px;
+        text-align: center;
+    }
+    div.X, div.O {
+        font-size: 80px;
+        color: #9E4770;
+    }
+</style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+    <div class="turn">Loading...</div>      <!--displays current turn X/O -->
+    <div class = "win">The winner is:</div> <!-- displays the winner-->
+    <div class ="board">                    <!--creates tic tac toe board-->
+        <script>
+            const NUM_SQUARES = 9;  //from previous code, sets the board to 9 squares
+            let board = document.querySelector(".board");       //sets the div class board to the variable board
+            let turnDisplay = document.querySelector(".turn");  //sets the div class turn to the variable turnDisplay
+            let winDisplay = document.querySelector(".win");    //sets the div class win to the variable winDisplay
+            let currentPlayer = Math.random() < 0.5 ? "X" : "O";    //randomly selects the starting player
+            let boardState = Array(NUM_SQUARES).fill("");           //creates an array where each square starts as empty, (later the array will update after a click)
+            turnDisplay.innerHTML = currentPlayer + "'s Turn";      //shows whose turn it is
+            for (i=0; i<NUM_SQUARES; i++) {
+                id = "sq"+i;        //saving from before since this gives each square a unique id
+                document.write( "<div class='square' id='" + id + "'></div>" );
+            }
+            document.querySelectorAll(".square").forEach((square, index) => {    //this attaches the "event" to all of the squares, for each goes through each square one by one
+                square.addEventListener("click", function() {           //the code "listens" for a click, when this occurs it will "do" the function meaning this makes the event occur everytime a square is clicked    
+                    if (square.innerHTML !== "") return;        //this makes sure you cannot click on the same square twice to change from X/O
+                    alert(currentPlayer + " was added to Square: " + i);  //modified previous alert to include X/O being added to specific square
+                    square.innerHTML = currentPlayer;           //changes the square to the correct X/O once clicked
+                    boardState[index] = currentPlayer;          //updates the boardState array based on the index or position in the board
+                    if (checkWinner()) {
+                        winDisplay.innerHTML = "The winner is: " + currentPlayer;   //displays winner if found
+                        return;     //no longer looks for a winner if found
+                    }
+                    currentPlayer = currentPlayer === "X" ? "O" : "X";      //switches turns between X/O
+                    turnDisplay.innerHTML = currentPlayer + "'s Turn";      //updates to show whose turn it is X/O
+                
+                });
+            });
+                function checkWinner() {        //function defining what qualifies as a winner
+                    const winningCombos = [
+                        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Row winners
+                        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Column winners
+                        [0, 4, 8], [2, 4, 6]             // Diagonal winners
+                    ];
+                    for (let combo of winningCombos) {      //for loop which looks for the 3 spots with the same X/O in the winning combos to determine if a winner is found
+                        const [a, b, c] = combo;
+                        if (boardState[a] && boardState[a] === boardState[b] && boardState[a] === boardState[c]) {
+                            return true; // Found a winner
+                        }
+                    }
+
+                    return false; // No winner yet, nothing will display in the win div until a winner is found
+                }
+            
+        </script>
+    </div>
+</body>
+</html>
